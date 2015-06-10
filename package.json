@@ -1,12 +1,23 @@
 {
   "name": "currylog",
   "version": "0.1.0",
-  "description": "",
+  "description": "An insanely simple logger.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./test/"
   },
-  "author": "",
+  "author": {
+    "name": "Nicholas Clawson",
+    "url": "http://nickclaw.com"
+  },
+  "homepage": "https://github.com/nickclaw/currylog",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickclaw/currylog"
+  },
+  "bugs": {
+    "url": "https://github.com/nickclaw/vlad/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "chai": "^3.0.0",
