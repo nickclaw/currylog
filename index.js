@@ -45,10 +45,11 @@ function log(type, template, options) {
 
 	// case: with template string, print message
 	var data = extend({}, this.options, options),
-		matches = template.match(/{{(.*?)}}/g);
+		matches = template.match(/{{(.*?)}}/g) || [];
 
-	matches.forEach(function(key) {
-		template = template.replace('{{' + key + '}}', typeof data[key] === 'function' ? data[key]() : data[key] );
+	matches.forEach(function(match) {
+		var key = match.substr(2, match.length - 4);
+		template = template.replace(match, typeof data[key] === 'function' ? data[key]() : data[key] );
 	});
 
 	console[type](template);
@@ -60,9 +61,14 @@ function log(type, template, options) {
  * @param {Object} props
  * @return obj
  */
-function extend(obj, props) {
-	Object.keys(props).forEach(function() {
-		obj[key] = props[key];
+function extend(obj, a, b) {
+
+	if (a) Object.keys(a).forEach(function(key) {
+		obj[key] = a[key];
+	});
+
+	if (b) Object.keys(b).forEach(function(key) {
+		obj[key] = b[key];
 	});
 
 	return obj;
