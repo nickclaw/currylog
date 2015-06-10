@@ -1,3 +1,6 @@
+var extend = require('lodash.assign'),
+    format = require('string-template');
+
 module.exports = buildConsole({
     time: Date.now
 });
@@ -38,38 +41,15 @@ function log(type, template, options) {
 
     // case: no template string render json
     if (typeof template !== 'string') {
-        var data = extend({}, this.options, template);
-        console[type](JSON.stringify(data, null, 4));
-        return;
+        var data = extend({}, this.options, template),
+            string = JSON.stringify(data, null, 4);
+
+        return console[type](JSON.stringify(data, null, 4));
     }
 
-    // case: with template string, print message
+    // case: template string
     var data = extend({}, this.options, options),
-        matches = template.match(/{{(.*?)}}/g) || [];
+        string = format(template, data);
 
-    matches.forEach(function(match) {
-        var key = match.substr(2, match.length - 4);
-        template = template.replace(match, typeof data[key] === 'function' ? data[key]() : data[key] );
-    });
-
-    console[type](template);
-}
-
-/**
- * Basic extend function
- * @param {*} obj
- * @param {Object} props
- * @return obj
- */
-function extend(obj, a, b) {
-
-    if (a) Object.keys(a).forEach(function(key) {
-        obj[key] = a[key];
-    });
-
-    if (b) Object.keys(b).forEach(function(key) {
-        obj[key] = b[key];
-    });
-
-    return obj;
+    return console[type](string);
 }

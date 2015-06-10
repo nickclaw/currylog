@@ -98,7 +98,7 @@ describe('currylog', function() {
                 done();
             });
 
-            currylog.error('{{time}}');
+            currylog.error('{time}');
         });
 
         it('should use current instances values', function(done) {
@@ -109,7 +109,7 @@ describe('currylog', function() {
 
             var log = currylog({ time: 'to get a watch' });
 
-            log.error('{{time}}');
+            log.error('{time}');
         });
 
         it('should use log supplied values by default', function(done) {
@@ -118,7 +118,7 @@ describe('currylog', function() {
                 done();
             });
 
-            currylog.error('{{time}}', { time: 'to get a watch' });
+            currylog.error('{time}', { time: 'to get a watch' });
         });
     });
 });
