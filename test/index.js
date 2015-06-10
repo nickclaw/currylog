@@ -69,7 +69,7 @@ describe('currylog', function() {
             var newLog = currylog();
 
             expect(newLog).to.be.instanceOf(Function);
-            expect(newLog).to.have.keys(Object.keys(currylog));
+            expect(newLog).to.have.keys([ 'error', 'log', 'options' ]);
         });
 
         it('should extend the parent currylogs options', function() {
@@ -93,32 +93,50 @@ describe('currylog', function() {
 
         it('should be able to render current timestamp by default', function(done) {
 
-            process.stderr.once('data', function(text) {
+            process.stdout.once('data', function(text) {
                 expect(text.length).to.be.at.least(13);
                 done();
             });
 
-            currylog.error('{time}');
+            currylog.log('{time}');
         });
 
         it('should use current instances values', function(done) {
-            process.stderr.once('data', function(text) {
+            process.stdout.once('data', function(text) {
                 expect(text).to.equal('to get a watch\n');
                 done();
             });
 
             var log = currylog({ time: 'to get a watch' });
 
-            log.error('{time}');
+            log.log('{time}');
         });
 
         it('should use log supplied values by default', function(done) {
-            process.stderr.once('data', function(text) {
+            process.stdout.once('data', function(text) {
                 expect(text).to.equal('to get a watch\n');
                 done();
             });
 
-            currylog.error('{time}', { time: 'to get a watch' });
+            currylog.log('{time}', { time: 'to get a watch' });
         });
+    });
+
+    describe('default options', function() {
+
+        it('should apply to future loggers', function(done) {
+            currylog.setDefaults({
+                hello: "world"
+            });
+
+            process.stdout.once('data', function(text) {
+                expect(text).to.equal('world\n');
+                done();
+            });
+
+            var log = currylog();
+            log.log('{hello}');
+        });
+
     });
 });

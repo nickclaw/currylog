@@ -1,9 +1,10 @@
 var extend = require('lodash.assign'),
     format = require('string-template');
 
-module.exports = buildConsole({
-    time: Date.now
-});
+var defaults = {};
+
+module.exports = buildConsole({ time: Date.now });
+module.exports.setDefaults = setDefaults;
 
 /**
  * Returns a new console instance
@@ -15,7 +16,7 @@ function buildConsole(args) {
     // create console base
     // this is a function so that we can extend the console via currying
     function console(newArgs) {
-        return buildConsole(extend({}, args, newArgs));
+        return buildConsole(extend({}, defaults, args, newArgs));
     }
 
     // add options and bound functions
@@ -24,6 +25,14 @@ function buildConsole(args) {
         log: log.bind(console, 'log'),
         error: log.bind(console, 'error'),
     });
+}
+
+/**
+ * Set the default values of all future instances
+ * @param {Object} defs
+ */
+function setDefaults(defs) {
+    defaults = defs;
 }
 
 //
