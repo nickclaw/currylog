@@ -1,5 +1,5 @@
 module.exports = buildConsole({
-	time: Date.now
+    time: Date.now
 });
 
 /**
@@ -9,18 +9,18 @@ module.exports = buildConsole({
  */
 function buildConsole(args) {
 
-	// create console base
-	// this is a function so that we can extend the console via currying
-	function console(newArgs) {
-		return buildConsole(extend({}, args, newArgs));
-	}
+    // create console base
+    // this is a function so that we can extend the console via currying
+    function console(newArgs) {
+        return buildConsole(extend({}, args, newArgs));
+    }
 
-	// add options and bound functions
-	return extend(console, {
-		options: args,
-		log: log.bind(console, 'log'),
-		error: log.bind(console, 'error'),
-	});
+    // add options and bound functions
+    return extend(console, {
+        options: args,
+        log: log.bind(console, 'log'),
+        error: log.bind(console, 'error'),
+    });
 }
 
 //
@@ -36,23 +36,23 @@ function buildConsole(args) {
  */
 function log(type, template, options) {
 
-	// case: no template string render json
-	if (typeof template !== 'string') {
-		var data = extend({}, this.options, template);
-		console[type](JSON.stringify(data, null, 4));
-		return;
-	}
+    // case: no template string render json
+    if (typeof template !== 'string') {
+        var data = extend({}, this.options, template);
+        console[type](JSON.stringify(data, null, 4));
+        return;
+    }
 
-	// case: with template string, print message
-	var data = extend({}, this.options, options),
-		matches = template.match(/{{(.*?)}}/g) || [];
+    // case: with template string, print message
+    var data = extend({}, this.options, options),
+        matches = template.match(/{{(.*?)}}/g) || [];
 
-	matches.forEach(function(match) {
-		var key = match.substr(2, match.length - 4);
-		template = template.replace(match, typeof data[key] === 'function' ? data[key]() : data[key] );
-	});
+    matches.forEach(function(match) {
+        var key = match.substr(2, match.length - 4);
+        template = template.replace(match, typeof data[key] === 'function' ? data[key]() : data[key] );
+    });
 
-	console[type](template);
+    console[type](template);
 }
 
 /**
@@ -63,13 +63,13 @@ function log(type, template, options) {
  */
 function extend(obj, a, b) {
 
-	if (a) Object.keys(a).forEach(function(key) {
-		obj[key] = a[key];
-	});
+    if (a) Object.keys(a).forEach(function(key) {
+        obj[key] = a[key];
+    });
 
-	if (b) Object.keys(b).forEach(function(key) {
-		obj[key] = b[key];
-	});
+    if (b) Object.keys(b).forEach(function(key) {
+        obj[key] = b[key];
+    });
 
-	return obj;
+    return obj;
 }
